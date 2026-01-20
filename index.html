@@ -34,7 +34,7 @@
       <!-- Camera -->
       <a-camera position="0 0.4 0" wasd-controls="acceleration:10;"></a-camera>
 
-      <!-- Templates (hidden until spawned) -->
+      <!-- Templates (hidden) -->
       <a-entity id="snowman-template" visible="false">
         <a-sphere radius="0.25" position="0 0.25 0" color="#FFFFFF"></a-sphere>
         <a-sphere radius="0.18" position="0 0.6 0" color="#FFFFFF"></a-sphere>
@@ -76,7 +76,8 @@
       const treeTemplate = document.querySelector('#tree-template');
 
       document.addEventListener('click', () => {
-        if (!reticle.object3D.visible) return;
+        // Use reticle position if visible, else default
+        const spawnPosition = reticle.object3D.visible ? reticle.getAttribute('position') : {x:0, y:0, z:-1};
 
         // Randomly choose snowman or tree
         const template = Math.random() < 0.5 ? snowmanTemplate : treeTemplate;
@@ -92,8 +93,8 @@
         const scale = 0.8 + Math.random() * 0.4;
         obj.setAttribute('scale', {x: scale, y: scale, z: scale});
 
-        // Position at reticle
-        obj.setAttribute('position', reticle.getAttribute('position'));
+        // Set position
+        obj.setAttribute('position', spawnPosition);
 
         // Add to scene
         scene.appendChild(obj);
